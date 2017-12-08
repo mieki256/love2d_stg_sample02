@@ -67,4 +67,5 @@ main.lua, conf.lua, *.png, *.ogg : CC0 / Public Domain
 
 sti(Simple-Tiled-Implementation) library : MIT/X11 Open Source License.
 
-main.lua、conf.lua、*.png、*.ogg のライセンスは CC0 / Public Domain とします。自由に使ってください。ただし、利用/同梱している stiライブラリは MIT/X11ライセンスになっていますので注意してください。
+main.lua、conf.lua、png画像、oggファイルのライセンスは CC0 / Public Domain とします。自由に使ってください。ただし、利用/同梱している stiライブラリは MIT/X11ライセンスになっていますので注意してください。
+
