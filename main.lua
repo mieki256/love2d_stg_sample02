@@ -1,5 +1,5 @@
 -- love2d STG sample 02
--- Last updated: <2017/12/08 17:43:42 +0900>
+-- Last updated: <2017/12/08 20:21:18 +0900>
 --
 -- how to play
 -- WASD or cursor : move
@@ -22,6 +22,7 @@ explosions_top = {}
 sounds = {}
 
 angle_change_key = false
+pause_fg = false
 
 scr_flash = 0
 scr_flash_duration = 0.7
@@ -64,6 +65,7 @@ end
 
 Explosion.draw = function(self)
   local n = math.floor(self.timer / self.duration * #self.quads) + 1
+  n = math.min(n , #self.quads)
   love.graphics.setColor(255, 255, 255)
   love.graphics.draw(self.img, self.quads[n], self.x, self.y,
                      math.rad(self.ang), self.scale, self.scale, self.ox, self.oy)
@@ -472,7 +474,7 @@ EnemyBullet.update = function(self, dt)
 end
 
 EnemyBullet.draw = function(self)
-  local n = math.floor(self.timer / self.duration * #self.quads) + 1
+  local n = math.floor(self.timer / self.duration * #self.quads) % #self.quads + 1
   love.graphics.draw(self.img, self.quads[n], self.x, self.y,
                      math.rad(self.disp_ang), 1.0, 1.0, self.ox, self.oy)
 end
@@ -1047,6 +1049,7 @@ function love.update(dt)
   end
 
   if dt > 0.75 then return end
+  if pause_fg then return end
 
   -- screen flash
   if scr_flash > 0 then
@@ -1240,5 +1243,8 @@ function love.keypressed(key, isrepeat)
       local success = love.window.setFullscreen(true)
       if success then fullscreen_fg = true end
     end
+  elseif key == "p" then
+    -- pause
+    pause_fg = not pause_fg
   end
 end
