@@ -6,9 +6,9 @@ love2d sample. top view scroll shooting game.
 Description
 -----------
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/vdmwiL5Rz64" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+[love2d STG sample on Windows10 x64 + love2d 0.10.2 - YouTube](https://youtu.be/vdmwiL5Rz64)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/sut33DIe_hg" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+[love2d STG sample on Raspberry Pi Zero W (raspbian jessie) - YouTube](https://youtu.be/sut33DIe_hg)
 
 Requirement
 -----------
