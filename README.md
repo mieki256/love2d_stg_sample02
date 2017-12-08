@@ -30,6 +30,7 @@ Requirement
 * raspbian jessie
 * SDL2 2.0.5 (OpenGl ES enable. OpenGL disable)
 * love2d 0.10.2
+* optional : [shut-term-keys](https://github.com/inoremap/shut-term-keys)
 
 raspbian stretch is not work. SDL2 can not play sound on raspbian stretch.
 
