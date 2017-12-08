@@ -3,8 +3,12 @@ love2d STG sample 02
 
 love2d sample. top view scroll shooting game.
 
-Description
+Screenshot
 -----------
+
+![Screenshot001](screenshots/screenshot_001.png)
+
+![Screenshot002](screenshots/screenshot_002.png)
 
 [love2d STG sample on Windows10 x64 + love2d 0.10.2 - YouTube](https://youtu.be/vdmwiL5Rz64)
 
@@ -16,7 +20,7 @@ Requirement
 * love2d (love) 0.10.2
 
 [LOVE - Free 2D Game Engine](https://love2d.org/)
- 
+
 ### Windows
 
 * love 0.10.2
@@ -39,7 +43,7 @@ raspbian stretch is not work. SDL2 can not play sound on raspbian stretch.
 Usage
 -----
 
-    git clone
+    git clone https://github.com/mieki256/love2d_stg_sample02.git
     love love2d_stg_sample02
 
 How to play
@@ -63,4 +67,3 @@ main.lua, conf.lua, *.png, *.ogg : CC0 / Public Domain
 sti(Simple-Tiled-Implementation) library : MIT/X11 Open Source License.
 
 main.lua、conf.lua、*.png、*.ogg のライセンスは CC0 / Public Domain とします。自由に使ってください。ただし、利用/同梱している stiライブラリは MIT/X11ライセンスになっていますので注意してください。
-
