@@ -1,7 +1,7 @@
 love2d STG sample 02
 ====================
 
-love2d sample. top view scroll shooting game.
+love2d sample. top view scroll shooting game (shoot'em up). 
 
 Screenshot
 -----------
