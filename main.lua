@@ -1,5 +1,5 @@
 -- love2d STG sample 02
--- Last updated: <2017/12/08 20:21:18 +0900>
+-- Last updated: <2017/12/09 02:34:22 +0900>
 --
 -- how to play
 -- WASD or cursor : move
@@ -1002,6 +1002,7 @@ function love.load()
 
   bg_a_x, bg_a_y = 0, 0
   bg_b_x, bg_b_y = 0, 0
+  bg_c_x, bg_c_y = 0, 0
   bg_diff_x, bg_diff_y = 0, 0
   bg_speed = 60
   enemy_timer = 0
@@ -1026,6 +1027,7 @@ function love.update(dt)
     -- bg_a_x, bg_a_y = 32, 1200
     bg_a_x, bg_a_y = 32, 480 * 7
     bg_b_x, bg_b_y = 32, bg_a_y
+    bg_c_x, bg_c_y = 32, bg_a_y
     bg_diff_x, bg_diff_y = 0, 0
     bg_speed = 60
 
@@ -1061,13 +1063,17 @@ function love.update(dt)
   bg_diff_x = 0
   bg_diff_y = bg_speed * dt
   bg_a_y = bg_a_y - bg_diff_y
-  bg_b_y = bg_b_y - bg_diff_y / 2
+  bg_b_y = bg_b_y - bg_diff_y * 0.5
+  bg_c_y = bg_c_y - bg_diff_y * 0.2
   if bg_a_y < 0 then bg_a_y = bg_a_y + 480 end
-  if bg_b_y < 0 then bg_b_y = bg_b_y + 480 end
+  if bg_b_y < 0 then bg_b_y = bg_b_y + 480 * 2 end
+  if bg_c_y < 0 then bg_c_y = bg_c_y + 480 end
   map.layers["bg_a"].x = -bg_a_x
   map.layers["bg_a"].y = -bg_a_y
   map.layers["bg_b"].x = -bg_b_x
   map.layers["bg_b"].y = -bg_b_y
+  map.layers["bg_c"].x = -bg_c_x
+  map.layers["bg_c"].y = -bg_c_y
   map:update(dt)
 
   -- bgm
