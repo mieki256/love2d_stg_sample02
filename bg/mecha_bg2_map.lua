@@ -8,7 +8,7 @@ return {
   height = 120,
   tilewidth = 32,
   tileheight = 32,
-  nextobjectid = 1,
+  nextobjectid = 39,
   properties = {},
   tilesets = {
     {
@@ -375,12 +375,12 @@ return {
         22, 12, 12, 12, 24, 40, 22, 21, 18, 18, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 22,
         30, 38, 39, 13, 4, 48, 30, 24, 38, 39, 21, 18, 18, 18, 18, 19, 0, 0, 0, 0, 25, 30,
         24, 24, 12, 12, 24, 12, 12, 32, 12, 12, 38, 39, 13, 22, 23, 27, 0, 0, 0, 0, 25, 3,
-        3, 7, 23, 7, 2, 13, 23, 40, 40, 22, 36, 37, 13, 30, 31, 27, 0, 0, 0, 1, 25, 3,
-        8, 15, 31, 15, 2, 8, 31, 48, 48, 30, 7, 29, 34, 34, 34, 35, 0, 0, 0, 1, 25, 8,
+        3, 7, 23, 7, 2, 13, 23, 40, 40, 22, 36, 37, 13, 30, 31, 27, 0, 0, 0, 0, 25, 3,
+        8, 15, 31, 15, 2, 8, 31, 48, 48, 30, 7, 29, 34, 34, 34, 35, 0, 0, 0, 0, 25, 8,
         24, 10, 10, 10, 24, 46, 47, 16, 16, 7, 9, 27, 0, 0, 0, 0, 0, 0, 0, 0, 25, 24,
         23, 5, 40, 38, 39, 23, 29, 34, 34, 34, 34, 35, 0, 0, 0, 0, 0, 0, 0, 0, 25, 23,
         31, 13, 48, 46, 47, 31, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 31,
-        23, 29, 34, 34, 34, 34, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 25, 23,
+        23, 29, 34, 34, 34, 34, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 23,
         31, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 31,
         10, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 10,
         23, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 23,
@@ -443,6 +443,288 @@ return {
         23, 23, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 25, 23, 23,
         31, 31, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 31, 31,
         10, 10, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 10, 10
+      }
+    },
+    {
+      type = "objectgroup",
+      name = "enemy_tbl",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 24,
+          name = "b",
+          type = "0",
+          shape = "rectangle",
+          x = 288,
+          y = 3200,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["speed"] = 128
+          }
+        },
+        {
+          id = 16,
+          name = "a",
+          type = "90",
+          shape = "rectangle",
+          x = 480,
+          y = 3040,
+          width = 96,
+          height = 96,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 23,
+          name = "b",
+          type = "180",
+          shape = "rectangle",
+          x = 320,
+          y = 2944,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["speed"] = 160
+          }
+        },
+        {
+          id = 19,
+          name = "a",
+          type = "180",
+          shape = "rectangle",
+          x = 544,
+          y = 2736,
+          width = 96,
+          height = 96,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 20,
+          name = "a",
+          type = "0",
+          shape = "rectangle",
+          x = 64,
+          y = 2448,
+          width = 96,
+          height = 96,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 18,
+          name = "a",
+          type = "180",
+          shape = "rectangle",
+          x = 544,
+          y = 2160,
+          width = 96,
+          height = 96,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 22,
+          name = "a",
+          type = "270",
+          shape = "rectangle",
+          x = 528,
+          y = 1888,
+          width = 96,
+          height = 96,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 25,
+          name = "b",
+          type = "180",
+          shape = "rectangle",
+          x = 384,
+          y = 2624,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["speed"] = 96
+          }
+        },
+        {
+          id = 26,
+          name = "b",
+          type = "180",
+          shape = "rectangle",
+          x = 384,
+          y = 2336,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["speed"] = 128
+          }
+        },
+        {
+          id = 27,
+          name = "b",
+          type = "90",
+          shape = "rectangle",
+          x = 272,
+          y = 1472,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["speed"] = 160
+          }
+        },
+        {
+          id = 29,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 224,
+          y = 3360,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 30,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 384,
+          y = 3232,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 31,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 384,
+          y = 3136,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 32,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 384,
+          y = 3328,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 33,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 256,
+          y = 2720,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 34,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 320,
+          y = 1984,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 35,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 544,
+          y = 1504,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 36,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 128,
+          y = 1216,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 37,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 128,
+          y = 1280,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 38,
+          name = "c",
+          type = "90",
+          shape = "rectangle",
+          x = 128,
+          y = 1152,
+          width = 48,
+          height = 48,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
       }
     }
   }

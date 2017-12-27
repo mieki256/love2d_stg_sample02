@@ -1,5 +1,5 @@
 -- love2d STG sample 02
--- Last updated: <2017/12/09 02:34:22 +0900>
+-- Last updated: <2017/12/27 23:22:23 +0900>
 --
 -- how to play
 -- WASD or cursor : move
@@ -543,11 +543,215 @@ Enemy.update = function(self, dt)
 end
 
 Enemy.draw = function(self)
+  love.graphics.setColor(255, 255, 255, 255)
   love.graphics.draw(self.img, self.x, self.y, math.rad(self.ang),
                      1.0, 1.0, self.ox, self.oy)
 end
 
 Enemy.check = function(self, x, y)
+  if self.activate then
+    local dw = math.floor(self.x - x)
+    local dh = math.floor(self.y - y)
+    local dd = self.collsion_r
+    if dw * dw + dh * dh <= dd * dd then return true end
+  end
+  return false
+end
+
+function bornZakoEnemy(x, y)
+  local dx = 0
+  local dy = 100
+  local xw = 64
+  local ang = math.random(360)
+  local angspd = 240
+  local obj = Enemy.new(x, y, dx, dy, xw, ang, angspd, enemy_img)
+  table.insert(enemys, obj)
+end
+
+-- define Beam class
+Beam = {}
+Beam.new = function(x, y, img, angle, speed)
+  local obj = {
+    activate = true, x = x, y = y, img = img,
+    angle = angle, speed = speed,
+    collsion_r = 16, hit_bullet = false
+  }
+  obj.ox = img:getWidth() / 2
+  obj.oy = img:getHeight() / 2
+  setmetatable(obj, {__index = Beam})
+  return obj
+end
+
+Beam.update = function(self, dt)
+  self.y = self.y + bg_diff_y
+  local spd = self.speed * dt
+  local radv = math.rad(self.angle)
+  self.x = self.x + spd * math.cos(radv)
+  self.y = self.y + spd * math.sin(radv)
+
+  local bg_id = map:getGid(self.x, self.y)
+  if bg_id > 1 or self.y - self.oy > scr_h then
+    self.activate = false
+    born_bullet_explosion(self.x, self.y)
+  elseif self.y - self.oy > scr_h then
+    self.activate = false
+  end
+end
+
+Beam.draw = function(self)
+  local x, y = math.floor(self.x), math.floor(self.y)
+  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.draw(self.img, x, y, math.rad(self.angle), 1.0, 1.0, self.ox, self.oy)
+end
+
+Beam.check = function(self, x, y)
+  if self.activate then
+    local dw = math.floor(self.x - x)
+    local dh = math.floor(self.y - y)
+    local dd = self.collsion_r
+    if dw * dw + dh * dh <= dd * dd then return true end
+  end
+  return false
+end
+
+function bornBeam(x, y, angle, speed)
+  local obj = Beam.new(x, y, beam_img, angle, speed)
+  table.insert(enemys, obj)
+end
+
+-- define EnemyLargeCanon class
+EnemyLargeCanon = {}
+EnemyLargeCanon.new = function(x, y, img, angle)
+  local obj = {
+    activate = true, x = x, y = y, img = img,
+    angle = angle, timer = 0,
+    collsion_r = 48, hit_bullet = false, life = 8, flash_timer = 0
+  }
+  obj.ox = img:getWidth() / 2
+  obj.oy = img:getHeight() / 2
+  setmetatable(obj, {__index = EnemyLargeCanon})
+  return obj
+end
+
+EnemyLargeCanon.update = function(self, dt)
+  if self.flash_timer > 0 then
+    self.flash_timer = self.flash_timer - 1
+  end
+
+  if self.hit_bullet then
+    self.life = self.life - 1
+    self.flash_timer = 1
+    self.hit_bullet = false
+    if self.life <= 0 then
+      self.activate = false
+      bornExplosion(self.x, self.y, 24, 24)
+      bornExplosionRing(self.x, self.y)
+      playSeExplosion()
+    end
+  end
+
+  if self.activate then
+    self.y = self.y + bg_diff_y
+    self.timer = self.timer + dt
+    local t = 0.8
+    if self.timer >= t then
+      self.timer = self.timer - t
+      local radv = math.rad(self.angle)
+      local d = 48
+      local x = self.x + d * math.cos(radv)
+      local y = self.y + d * math.sin(radv)
+      bornBeam(x, y, self.angle, 320)
+    end
+
+    if self.y - self.oy > scr_h then
+      self.activate = false
+    end
+  end
+end
+
+EnemyLargeCanon.draw = function(self)
+  local x, y = math.floor(self.x), math.floor(self.y)
+  if self.flash_timer > 0 then
+    love.graphics.setColor(255, 0, 0, 255)
+  else
+    love.graphics.setColor(255, 255, 255, 255)
+  end
+  love.graphics.draw(self.img, x, y, math.rad(self.angle), 1.0, 1.0, self.ox, self.oy)
+end
+
+EnemyLargeCanon.check = function(self, x, y)
+  if self.activate then
+    local dw = math.floor(self.x - x)
+    local dh = math.floor(self.y - y)
+    local dd = self.collsion_r
+    if dw * dw + dh * dh <= dd * dd then return true end
+  end
+  return false
+end
+
+-- define EnemyBlock class
+EnemyBlock = {}
+EnemyBlock.new = function(x, y, img, angle, speed)
+  local obj = {
+    activate = true, x = x, y = y, img = img,
+    angle = angle, speed = speed,
+    collsion_r = 32, hit_bullet = false, life = 10, flash_timer = 0
+  }
+  obj.ox = img:getWidth() / 2
+  obj.oy = img:getHeight() / 2
+  setmetatable(obj, {__index = EnemyBlock})
+  return obj
+end
+
+EnemyBlock.update = function(self, dt)
+  if self.flash_timer > 0 then
+    self.flash_timer = self.flash_timer - 1
+  end
+
+  if self.hit_bullet then
+    self.life = self.life - 1
+    self.flash_timer = 1
+    self.hit_bullet = false
+    if self.life <= 0 then
+      self.activate = false
+      bornExplosion(self.x, self.y, 24, 24)
+      bornExplosionRing(self.x, self.y)
+      playSeExplosion()
+    end
+  end
+
+  if self.activate then
+    self.y = self.y + bg_diff_y
+    local spd = self.speed * dt
+    local radv = math.rad(self.angle)
+    local dx = math.cos(radv)
+    local dy = math.sin(radv)
+    self.x = self.x + spd * dx
+    self.y = self.y + spd * dy
+
+    local x = self.x + 32 * dx
+    local y = self.y + 32 * dy
+    if map:getGid(x, y) > 1 then
+      self.angle = (self.angle + 180) % 360
+    end
+
+    if self.y - self.oy > scr_h then
+      self.activate = false
+    end
+  end
+end
+
+EnemyBlock.draw = function(self)
+  local x, y = math.floor(self.x), math.floor(self.y)
+  if self.flash_timer > 0 then
+    love.graphics.setColor(255, 0, 0, 255)
+  else
+    love.graphics.setColor(255, 255, 255, 255)
+  end
+  love.graphics.draw(self.img, x, y, 0, 1.0, 1.0, self.ox, self.oy)
+end
+
+EnemyBlock.check = function(self, x, y)
   if self.activate then
     local dw = math.floor(self.x - x)
     local dh = math.floor(self.y - y)
@@ -760,6 +964,35 @@ EnemyBoss.check = function(self, x, y)
   return false
 end
 
+-- born enemy
+function bornEnemy(bg_x, bg_y)
+  while born_enemy_index <= #enemy_set_tbl do
+    local tbl = enemy_set_tbl[born_enemy_index]
+    if bg_y - 64 > tbl.y then break end
+
+    local ang = tonumber(tbl.type)
+    local bx = bg_x % 1.0
+    local by = bg_y % 1.0
+    local x = tbl.x - bg_x
+    local y = tbl.y - bg_y
+    local obj = nil
+    if tbl.name == "a" then
+      obj = EnemyLargeCanon.new(x, y, canon_img, ang)
+    elseif tbl.name == "b" then
+      local spd = tbl.properties["speed"]
+      obj = EnemyBlock.new(x, y, block_img, ang, spd)
+    elseif tbl.name == "c" then
+      local dx, dy = 0, 100
+      local xw = 64
+      local ang = math.random(360)
+      local angspd = 240
+      obj = Enemy.new(x, y, dx, dy, xw, ang, angspd, enemy_img)
+    end
+    table.insert(enemys, obj)
+    born_enemy_index = born_enemy_index + 1
+  end
+end
+
 -- define BGM control class
 
 BgmControl = {}
@@ -920,6 +1153,9 @@ function love.load()
   flash_img = love.graphics.newImage("images/ring03_512x512.png")
   enemybullet_img = love.graphics.newImage("images/enemy_bullet04.png")
   enemyboss_img = love.graphics.newImage("images/enemy_boss01_448x256_all.png")
+  canon_img = love.graphics.newImage("images/enemy_large_canon.png")
+  block_img = love.graphics.newImage("images/enemy_block_64x64_01.png")
+  beam_img = love.graphics.newImage("images/enemy_beam01_64x64.png")
 
   -- make Quad (split texture)
   bulletexplo_quads = getQuads(bulletexplo_img, 64, 64)
@@ -960,6 +1196,24 @@ function love.load()
     y = y + bg_a_y
     return map:getGidByPixel(x, y, "bg_a")
   end
+
+  -- get map objects
+  enemy_set_tbl = {}
+  for k, obj in pairs(map.objects) do
+    local x, y, w, h = obj.x, obj.y, obj.width, obj.height
+    x = math.floor(x + w / 2)
+    y = math.floor(y + h / 2)
+    local data = {
+      name=obj.name, type=obj.type,
+      x=x, y=y, properties = obj.properties
+    }
+    table.insert(enemy_set_tbl, data)
+  end
+
+  -- sort objects by y
+  table.sort(enemy_set_tbl, function(a, b) return (a.y > b.y) end)
+
+  map.layers["enemy_tbl"].visible = false
 
   -- load sound
   local srctype = ".ogg"
@@ -1007,6 +1261,7 @@ function love.load()
   bg_speed = 60
   enemy_timer = 0
   boss_born_fg = false
+  born_enemy_index = 1
 
   -- framerate steady
   min_dt = 1.0 / 60
@@ -1033,6 +1288,8 @@ function love.update(dt)
 
     enemy_timer = 0
     boss_born_fg = false
+    born_enemy_index = 1
+
     bgm:setNextBgm("bgm_stg1")
     stage_ctl_step = 1
     stage_clear_fg = false
@@ -1091,22 +1348,19 @@ function love.update(dt)
   player.bg_hit_id = map:getGid(player.x, player.y)
   player:update(dt)
 
+  function bornZakoEnemy(x, y)
+    local dx = 0
+    local dy = 100
+    local xw = 64
+    local ang = math.random(360)
+    local angspd = 240
+    local obj = Enemy.new(x, y, dx, dy, xw, ang, angspd, enemy_img)
+    table.insert(enemys, obj)
+  end
+
   -- born enemy
   if bg_a_y > scr_h * 2 then
-    enemy_timer = enemy_timer + dt
-    local chktime = 0.8
-    if enemy_timer >= chktime then
-      enemy_timer = enemy_timer - chktime
-      local x = math.random(scr_w / 2 - 200, scr_w / 2 + 200)
-      local y = -(enemy_img:getHeight() / 2)
-      local dx = 0
-      local dy = 100
-      local xw = 64
-      local ang = math.random(360)
-      local angspd = 240
-      local obj = Enemy.new(x, y, dx, dy, xw, ang, angspd, enemy_img)
-      table.insert(enemys, obj)
-    end
+    bornEnemy(bg_a_x, bg_a_y)
   end
 
   -- move objects
