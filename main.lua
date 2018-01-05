@@ -1,5 +1,5 @@
 -- love2d STG sample 02
--- Last updated: <2017/12/29 06:19:32 +0900>
+-- Last updated: <2018/01/06 04:16:01 +0900>
 --
 -- how to play
 -- WASD or cursor : move
@@ -572,10 +572,12 @@ end
 Beam = {}
 Beam.new = function(x, y, img, angle, speed)
   local obj = {
-    activate = true, x = x, y = y, img = img,
+    activate = true, bx = x, by = y, img = img,
     angle = angle, speed = speed,
     collsion_r = 16, hit_bullet = false
   }
+  obj.x = x - bg_a_x
+  obj.y = y - bg_a_y
   obj.ox = img:getWidth() / 2
   obj.oy = img:getHeight() / 2
   setmetatable(obj, {__index = Beam})
@@ -583,11 +585,12 @@ Beam.new = function(x, y, img, angle, speed)
 end
 
 Beam.update = function(self, dt)
-  self.y = self.y + bg_diff_y
   local spd = self.speed * dt
   local radv = math.rad(self.angle)
-  self.x = self.x + spd * math.cos(radv)
-  self.y = self.y + spd * math.sin(radv)
+  self.bx = self.bx + spd * math.cos(radv)
+  self.by = self.by + spd * math.sin(radv)
+  self.x = self.bx - bg_a_x
+  self.y = self.by - bg_a_y
 
   local bg_id = map:getGid(self.x, self.y)
   if bg_id > 1 or self.y - self.oy > scr_h then
@@ -599,7 +602,8 @@ Beam.update = function(self, dt)
 end
 
 Beam.draw = function(self)
-  local x, y = math.floor(self.x), math.floor(self.y)
+  local x = math.floor(self.bx - bg_a_x)
+  local y = math.floor(self.by - bg_a_y)
   love.graphics.setColor(255, 255, 255, 255)
   love.graphics.draw(self.img, x, y, math.rad(self.angle), 1.0, 1.0, self.ox, self.oy)
 end
@@ -623,10 +627,12 @@ end
 EnemyLargeCanon = {}
 EnemyLargeCanon.new = function(x, y, img, angle)
   local obj = {
-    activate = true, x = x, y = y, img = img,
+    activate = true, bx = x, by = y, img = img,
     angle = angle, timer = 0,
     collsion_r = 48, hit_bullet = false, life = 8, flash_timer = 0
   }
+  obj.x = x - bg_a_x
+  obj.y = y - bg_a_y
   obj.ox = img:getWidth() / 2
   obj.oy = img:getHeight() / 2
   setmetatable(obj, {__index = EnemyLargeCanon})
@@ -634,6 +640,9 @@ EnemyLargeCanon.new = function(x, y, img, angle)
 end
 
 EnemyLargeCanon.update = function(self, dt)
+  self.x = self.bx - bg_a_x
+  self.y = self.by - bg_a_y
+
   if self.flash_timer > 0 then
     self.flash_timer = self.flash_timer - 1
   end
@@ -651,15 +660,14 @@ EnemyLargeCanon.update = function(self, dt)
   end
 
   if self.activate then
-    self.y = self.y + bg_diff_y
     self.timer = self.timer + dt
     local t = 0.8
     if self.timer >= t then
       self.timer = self.timer - t
       local radv = math.rad(self.angle)
       local d = 48
-      local x = self.x + d * math.cos(radv)
-      local y = self.y + d * math.sin(radv)
+      local x = self.bx + d * math.cos(radv)
+      local y = self.by + d * math.sin(radv)
       bornBeam(x, y, self.angle, 320)
     end
 
@@ -670,7 +678,8 @@ EnemyLargeCanon.update = function(self, dt)
 end
 
 EnemyLargeCanon.draw = function(self)
-  local x, y = math.floor(self.x), math.floor(self.y)
+  local x = math.floor(self.bx - bg_a_x)
+  local y = math.floor(self.by - bg_a_y)
   if self.flash_timer > 0 then
     love.graphics.setColor(255, 0, 0, 255)
   else
@@ -693,10 +702,12 @@ end
 EnemyBlock = {}
 EnemyBlock.new = function(x, y, img, angle, speed)
   local obj = {
-    activate = true, x = x, y = y, img = img,
+    activate = true, bx = x, by = y, img = img,
     angle = angle, speed = speed,
     collsion_r = 32, hit_bullet = false, life = 10, flash_timer = 0
   }
+  obj.x = x - bg_a_x
+  obj.y = y - bg_a_y
   obj.ox = img:getWidth() / 2
   obj.oy = img:getHeight() / 2
   setmetatable(obj, {__index = EnemyBlock})
@@ -721,13 +732,14 @@ EnemyBlock.update = function(self, dt)
   end
 
   if self.activate then
-    self.y = self.y + bg_diff_y
     local spd = self.speed * dt
     local radv = math.rad(self.angle)
     local dx = math.cos(radv)
     local dy = math.sin(radv)
-    self.x = self.x + spd * dx
-    self.y = self.y + spd * dy
+    self.bx = self.bx + spd * dx
+    self.by = self.by + spd * dy
+    self.x = self.bx - bg_a_x
+    self.y = self.by - bg_a_y
 
     local x = self.x + 32 * dx
     local y = self.y + 32 * dy
@@ -742,7 +754,8 @@ EnemyBlock.update = function(self, dt)
 end
 
 EnemyBlock.draw = function(self)
-  local x, y = math.floor(self.x), math.floor(self.y)
+  local x = math.floor(self.bx - bg_a_x)
+  local y = math.floor(self.by - bg_a_y)
   if self.flash_timer > 0 then
     love.graphics.setColor(255, 0, 0, 255)
   else
@@ -970,18 +983,19 @@ function bornEnemy(bg_x, bg_y)
     local tbl = enemy_set_tbl[born_enemy_index]
     if bg_y - 64 > tbl.y then break end
 
-    local ang = tonumber(tbl.type)
-    local bx = bg_x % 1.0
-    local by = bg_y % 1.0
-    local x = tbl.x - bg_x
-    local y = tbl.y - bg_y
     local obj = nil
-    if tbl.name == "a" then
-      obj = EnemyLargeCanon.new(x, y, canon_img, ang)
-    elseif tbl.name == "b" then
+    if tbl.name == "canon" then
+      -- canon
+      local ang = tonumber(tbl.type)
+      obj = EnemyLargeCanon.new(tbl.x, tbl.y, canon_img, ang)
+    elseif tbl.name == "block" then
+      -- block
+      local ang = tonumber(tbl.type)
       local spd = tbl.properties["speed"]
-      obj = EnemyBlock.new(x, y, block_img, ang, spd)
-    elseif tbl.name == "c" then
+      obj = EnemyBlock.new(tbl.x, tbl.y, block_img, ang, spd)
+    elseif tbl.name == "zako" then
+      -- zako ufo
+      local x, y = tbl.x - bg_x, tbl.y - bg_y
       local dx, dy = 0, 100
       local xw = 64
       local ang = math.random(360)
@@ -1215,6 +1229,8 @@ function love.load()
 
   map.layers["enemy_tbl"].visible = false
 
+  -- map.layers["bg_b"].visible = false
+
   -- load sound
   local srctype = ".ogg"
   local audio_list = {
@@ -1277,7 +1293,6 @@ function love.load()
 
   bg_a_x, bg_a_y = 0, 0
   bg_b_x, bg_b_y = 0, 0
-  bg_c_x, bg_c_y = 0, 0
   bg_diff_x, bg_diff_y = 0, 0
   bg_speed = 60
   enemy_timer = 0
@@ -1301,9 +1316,8 @@ function love.update(dt)
     player.shot_timer = -0.25
 
     -- bg_a_x, bg_a_y = 32, 1200
-    bg_a_x, bg_a_y = 32, 480 * 7
+    bg_a_x, bg_a_y = 32, 480 * 9
     bg_b_x, bg_b_y = 32, bg_a_y
-    bg_c_x, bg_c_y = 32, bg_a_y
     bg_diff_x, bg_diff_y = 0, 0
     bg_speed = 60
 
@@ -1346,17 +1360,14 @@ function love.update(dt)
   bg_diff_x = 0
   bg_diff_y = bg_speed * dt
   bg_a_y = bg_a_y - bg_diff_y
-  bg_b_y = bg_b_y - bg_diff_y * 0.5
-  bg_c_y = bg_c_y - bg_diff_y * 0.2
+  bg_b_y = bg_b_y - bg_diff_y * 0.25
   if bg_a_y < 0 then bg_a_y = bg_a_y + 480 end
   if bg_b_y < 0 then bg_b_y = bg_b_y + 480 * 2 end
-  if bg_c_y < 0 then bg_c_y = bg_c_y + 480 end
-  map.layers["bg_a"].x = -bg_a_x
-  map.layers["bg_a"].y = -bg_a_y
-  map.layers["bg_b"].x = -bg_b_x
-  map.layers["bg_b"].y = -bg_b_y
-  map.layers["bg_c"].x = -bg_c_x
-  map.layers["bg_c"].y = -bg_c_y
+  map.layers["bg_a"].x = math.floor(-bg_a_x)
+  map.layers["bg_a"].y = math.floor(-bg_a_y)
+  map.layers["bg_b"].x = math.floor(-bg_b_x)
+  map.layers["bg_b"].y = math.floor(-bg_b_y)
+
   map:update(dt)
 
   -- bgm
@@ -1472,12 +1483,12 @@ function love.draw()
 
   player:draw()
 
-  love.graphics.setColor(255, 255, 255, 255)
   love.graphics.setBlendMode("add")
+  love.graphics.setColor(255, 255, 255, 255)
   drawSprites(player_bullets)
 
-  love.graphics.setColor(255, 255, 255, 255)
   love.graphics.setBlendMode("alpha")
+  love.graphics.setColor(255, 255, 255, 255)
   drawSprites(enemy_bullets)
 
   love.graphics.setColor(255, 255, 255, 255)
