@@ -1,10 +1,13 @@
 -- love2d STG sample 02
--- Last updated: <2018/01/06 04:16:01 +0900>
+-- Last updated: <2018/01/06 08:53:15 +0900>
 --
 -- how to play
 -- WASD or cursor : move
--- Z : Toggle change gun angle
+-- Z   : Toggle change gun angle
 -- F11 : Toggle fullscreen mode
+-- F10 : Toggle using palette change shader
+-- F9  : Toggle blend mode when drawing bullets
+-- P   : Pause
 -- ESC : Exit to game
 --
 -- Author : mieki256
@@ -23,6 +26,8 @@ sounds = {}
 
 angle_change_key = false
 pause_fg = false
+palette_shader_enable = true
+bullet_blend_mode_add = true
 
 scr_flash = 0
 scr_flash_duration = 0.7
@@ -1455,10 +1460,12 @@ function love.draw()
   love.graphics.clear(0, 0, 0, 255)
 
   -- draw tilemap BG
-  love.graphics.setShader(palchg_shader)
+  if palette_shader_enable then love.graphics.setShader(palchg_shader) end
+
   love.graphics.setColor(255, 255, 255)
   map:draw()
-  love.graphics.setShader()
+
+  if palette_shader_enable then love.graphics.setShader() end
 
   -- draw flash
   if scr_flash > 0 then
@@ -1483,7 +1490,7 @@ function love.draw()
 
   player:draw()
 
-  love.graphics.setBlendMode("add")
+  if bullet_blend_mode_add then love.graphics.setBlendMode("add") end
   love.graphics.setColor(255, 255, 255, 255)
   drawSprites(player_bullets)
 
@@ -1534,7 +1541,7 @@ function love.keypressed(key, isrepeat)
     -- gun angle change mode
     angle_change_key = true
   elseif key == "f11" then
-    -- change fullscreen mode
+    -- toggle fullscreen mode
     if fullscreen_fg then
       local success = love.window.setFullscreen(false)
       if success then fullscreen_fg = false end
@@ -1542,6 +1549,12 @@ function love.keypressed(key, isrepeat)
       local success = love.window.setFullscreen(true)
       if success then fullscreen_fg = true end
     end
+  elseif key == "f10" then
+    -- toggle palette shader
+    palette_shader_enable = not palette_shader_enable
+  elseif key == "f9" then
+    -- toggle bullet draw mode
+    bullet_blend_mode_add = not bullet_blend_mode_add
   elseif key == "p" then
     -- pause
     pause_fg = not pause_fg
