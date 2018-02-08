@@ -1,5 +1,5 @@
 -- love2d STG sample 02
--- Last updated: <2018/01/06 08:53:15 +0900>
+-- Last updated: <2018/01/06 22:29:56 +0900>
 --
 -- how to play
 -- WASD or cursor : move
@@ -1265,22 +1265,22 @@ function love.load()
   -- make shader
   local shadercode = [[
       extern number factor;
-      extern vec3 checkcolor;
-      extern vec3 replacecolor;
+      extern number checkcolor;
+      extern vec4 replacecolor;
 
       vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
         vec4 pixel = Texel(texture, texture_coords);
-        if (pixel.r == checkcolor.r && pixel.g == checkcolor.g && pixel.b == checkcolor.b) {
-          pixel.r = pixel.r * (1.0 - factor) + replacecolor.r * factor;
-          pixel.g = pixel.g * (1.0 - factor) + replacecolor.g * factor;
-          pixel.b = pixel.b * (1.0 - factor) + replacecolor.b * factor;
-        }
-        return pixel * color;
+        float nowcol = ((pixel.r * 65536.0) + (pixel.g * 256.0) + pixel.b) * 255.0;
+        float fac = (1.0 - sign(abs(nowcol - checkcolor))) * factor;
+        return mix(pixel, replacecolor, fac) * color;
       }
   ]]
   palchg_shader = love.graphics.newShader(shadercode)
-  palchg_shader:send("checkcolor", {1.0, 0.0, 0.0})  -- R,G,B
-  palchg_shader:send("replacecolor", {0.0, 0.0, 0.0})  -- R,G,B
+
+  -- checkcolor : 0xRRGGBB = (R << 16) + (G << 8) + B
+  local checkcolor = ((1.0 * 65536) + (0.0 * 256) + 0.0) * 255.0
+  palchg_shader:send("checkcolor", checkcolor)
+  palchg_shader:send("replacecolor", {0.0, 0.0, 0.0, 1.0})  -- R,G,B,A
   palchg_angle = 0
 
   -- work init
@@ -1461,10 +1461,8 @@ function love.draw()
 
   -- draw tilemap BG
   if palette_shader_enable then love.graphics.setShader(palchg_shader) end
-
   love.graphics.setColor(255, 255, 255)
   map:draw()
-
   if palette_shader_enable then love.graphics.setShader() end
 
   -- draw flash
