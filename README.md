@@ -17,19 +17,19 @@ Screenshot
 Requirement
 -----------
 
-* love2d (love) 0.10.2
+* love2d (love) 11.1
 
 [LOVE - Free 2D Game Engine](https://love2d.org/)
 
 ### Windows
 
-* love 0.10.2
+* love 11.1
 
 ### Raspberry Pi Zero W
 
 * raspbian jessie
-* SDL2 2.0.5 (OpenGl ES enable. OpenGL disable)
-* love2d 0.10.2
+* SDL2 2.0.5 (OpenGLES enable. OpenGL disable)
+* love2d 11.1
 * optional : [shut-term-keys](https://github.com/inoremap/shut-term-keys)
 
 raspbian stretch is not work. SDL2 can not play sound on raspbian stretch.
@@ -38,7 +38,7 @@ raspbian stretch is not work. SDL2 can not play sound on raspbian stretch.
 
 * raspbian jessie or raspbian stretch
 * SDL2 (OpenGL enable)
-* love2d 0.10.2
+* love2d 11.1
 * GL driver enable.
 
 Usage
@@ -53,6 +53,7 @@ How to play
 * move : cursor key or WASD
 * toggle gun angle change : Z
 * Fullscreen mode change : F11
+* Pause : P
 * Exit : ESC
 
 Use Library

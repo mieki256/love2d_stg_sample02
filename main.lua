@@ -1,5 +1,5 @@
 -- love2d STG sample 02
--- Last updated: <2018/01/06 22:29:56 +0900>
+-- Last updated: <2018/04/29 06:06:13 +0900>
 --
 -- how to play
 -- WASD or cursor : move
@@ -71,7 +71,7 @@ end
 Explosion.draw = function(self)
   local n = math.floor(self.timer / self.duration * #self.quads) + 1
   n = math.min(n , #self.quads)
-  love.graphics.setColor(255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0)
   love.graphics.draw(self.img, self.quads[n], self.x, self.y,
                      math.rad(self.ang), self.scale, self.scale, self.ox, self.oy)
 end
@@ -101,9 +101,9 @@ ExplosionRing.new = function(x, y, img, duration, r, g, b, scale, ratio)
   }
   obj.ang = math.random(-45, 45)
   obj.duration = duration or 0.75
-  obj.r = r or 255
-  obj.g = g or 255
-  obj.b = b or 255
+  obj.r = r or 1.0
+  obj.g = g or 1.0
+  obj.b = b or 1.0
   obj.last_scale = scale or 1.0
   obj.ratio = ratio or 1.0
   obj.ox = obj.img:getWidth() / 2
@@ -119,7 +119,7 @@ end
 
 ExplosionRing.draw = function(self)
   local d = self.timer / self.duration
-  local alpha = 255 * (1.0 - d)
+  local alpha = 1.0 - d
   -- local scale = 2.0 * (-math.pow( 2, -10 * self.timer / self.duration ) + 1)
   d = d - 1.0
   local scale = self.last_scale * (d * d * d + 1.0)
@@ -129,16 +129,16 @@ ExplosionRing.draw = function(self)
                      math.rad(self.ang), scale, scale * self.ratio,
                      self.ox, self.oy)
   love.graphics.setBlendMode("alpha")
-  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 end
 
 function bornExplosionRing(x, y, duration, r, g, b, scale, ratio)
   local dur = duration or 0.75
   local lscale = scale or 1.0
   local lratio = ratio or 1.0
-  local cr = r or 255
-  local cg = g or 255
-  local cb = b or 255
+  local cr = r or 1.0
+  local cg = g or 1.0
+  local cb = b or 1.0
   local obj = ExplosionRing.new(x, y, flash_img, dur, cr, cg, cb, lscale, lratio)
   table.insert(explosions, obj)
 end
@@ -344,7 +344,7 @@ Player.draw = function(self)
       if math.floor(self.blink / 2) % 2 == 0 then fg = true else fg = false end
     end
     if fg then
-      love.graphics.setColor(255, 255, 255)
+      love.graphics.setColor(1.0, 1.0, 1.0)
       love.graphics.draw(self.img_a, self.x, self.y,
                          0, self.scale, self.scale, self.ox, self.oy)
       love.graphics.draw(self.img_b, self.x, self.y,
@@ -548,7 +548,7 @@ Enemy.update = function(self, dt)
 end
 
 Enemy.draw = function(self)
-  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   love.graphics.draw(self.img, self.x, self.y, math.rad(self.ang),
                      1.0, 1.0, self.ox, self.oy)
 end
@@ -609,7 +609,7 @@ end
 Beam.draw = function(self)
   local x = math.floor(self.bx - bg_a_x)
   local y = math.floor(self.by - bg_a_y)
-  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   love.graphics.draw(self.img, x, y, math.rad(self.angle), 1.0, 1.0, self.ox, self.oy)
 end
 
@@ -686,9 +686,9 @@ EnemyLargeCanon.draw = function(self)
   local x = math.floor(self.bx - bg_a_x)
   local y = math.floor(self.by - bg_a_y)
   if self.flash_timer > 0 then
-    love.graphics.setColor(255, 0, 0, 255)
+    love.graphics.setColor(1.0, 0, 0, 1.0)
   else
-    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   end
   love.graphics.draw(self.img, x, y, math.rad(self.angle), 1.0, 1.0, self.ox, self.oy)
 end
@@ -762,9 +762,9 @@ EnemyBlock.draw = function(self)
   local x = math.floor(self.bx - bg_a_x)
   local y = math.floor(self.by - bg_a_y)
   if self.flash_timer > 0 then
-    love.graphics.setColor(255, 0, 0, 255)
+    love.graphics.setColor(1.0, 0, 0, 1.0)
   else
-    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   end
   love.graphics.draw(self.img, x, y, 0, 1.0, 1.0, self.ox, self.oy)
 end
@@ -946,12 +946,12 @@ end
 EnemyBoss.draw = function(self)
   local shake_x, shake_y = 0, 0
   if self.damage_wait > 0 then
-    local a = 255 - math.floor(255 * self.damage_wait / self.damage_wait_init)
-    love.graphics.setColor(255, a, a, 255)
+    local a = 1.0 - (self.damage_wait / self.damage_wait_init)
+    love.graphics.setColor(1.0, a, a, 1.0)
     shake_x = math.random(-2, 2)
     shake_y = math.random(-2, 2)
   else
-    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   end
 
   for i, v in ipairs(self.dispdata) do
@@ -969,7 +969,7 @@ EnemyBoss.draw = function(self)
     end
     love.graphics.draw(self.img, quad, x, y, ang, 1.0, 1.0, v.ox, v.oy)
   end
-  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 end
 
 EnemyBoss.check = function(self, x, y)
@@ -1152,6 +1152,8 @@ end
 -- init
 function love.load()
 
+  love.setDeprecationOutput(true)
+  
   -- set filter
   love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -1253,7 +1255,9 @@ function love.load()
     if v.static then
       src = love.audio.newSource(fn, "static")
     else
-      src = love.audio.newSource(fn)
+      -- When playing stream audio data with love 2d 11.1, noise mixes when playing loops.
+      -- src = love.audio.newSource(fn, "stream")
+      src = love.audio.newSource(fn, "static")
     end
     src:setLooping(v.loop)
     src:setVolume(v.vol)
@@ -1457,11 +1461,11 @@ end
 function love.draw()
   -- set canvas
   love.graphics.setCanvas(canvas)
-  love.graphics.clear(0, 0, 0, 255)
+  love.graphics.clear(0, 0, 0, 1.0)
 
   -- draw tilemap BG
   if palette_shader_enable then love.graphics.setShader(palchg_shader) end
-  love.graphics.setColor(255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0)
   map:draw()
   if palette_shader_enable then love.graphics.setShader() end
 
@@ -1469,34 +1473,33 @@ function love.draw()
   if scr_flash > 0 then
     local d = scr_flash / scr_flash_duration
     if scr_flash_kind == 0 then
-      d = 255 * d
-      love.graphics.setColor(255, 255, 255, d)
+      love.graphics.setColor(1.0, 1.0, 1.0, d)
     elseif scr_flash_kind == 1 then
-      d = 200 * d
-      love.graphics.setColor(255, 160, 64, d)
+      d = d * 200 / 255
+      love.graphics.setColor(1.0, 0.625, 0.25, d)
     end
     love.graphics.rectangle("fill", 0, 0, scr_w, scr_h)
   end
 
   -- draw objects
-  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   drawSprites(explosions)
 
-  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   love.graphics.setBlendMode("alpha")
   drawSprites(enemys)
 
   player:draw()
 
   if bullet_blend_mode_add then love.graphics.setBlendMode("add") end
-  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   drawSprites(player_bullets)
 
   love.graphics.setBlendMode("alpha")
-  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   drawSprites(enemy_bullets)
 
-  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   drawSprites(explosions_top)
 
   -- unset canvas
@@ -1509,7 +1512,7 @@ function love.draw()
   scr_ofsy = (wdw_h - (scr_h * scr_scale)) / 2
 
   -- draw canvas to window
-  love.graphics.setColor(255, 255, 255)
+  love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
   love.graphics.draw(canvas, scr_ofsx, scr_ofsy, 0, scr_scale, scr_scale)
 
   local tx = 8
